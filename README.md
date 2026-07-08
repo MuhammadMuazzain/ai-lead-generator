@@ -22,6 +22,12 @@ A lead generation tool that scrapes fresh B2B contact data, then uses OpenAI to 
 
 ---
 
+## Client
+
+This system was built for **Leveno**.
+
+---
+
 ## Features
 
 - 🕵️‍♂️ **Automated Web Scraping:** Collect fresh leads from sources like LinkedIn via a scraping API.
@@ -29,6 +35,7 @@ A lead generation tool that scrapes fresh B2B contact data, then uses OpenAI to 
 - 💡 **Natural Language Input:** Describe your ideal lead; the agent extracts structured filters and runs the workflow.
 - 🤝 **Outreach Suggestions:** Personalized tips for email or LinkedIn engagement, tailored per lead.
 - 🖥 **Interactive UI:** Manage the pipeline and settings from a Streamlit dashboard.
+- 📤 **Export to CSV:** Download the latest enriched results as a CSV.
 
 ---
 
@@ -90,6 +97,7 @@ A lead generation tool that scrapes fresh B2B contact data, then uses OpenAI to 
 4. **Review enriched results**
    - See fully scored, ranked, and enriched leads.
    - Each lead features an AI summary, relevance score, and outreach tip.
+   - Use **Export results to CSV** to download the output.
 
 ---
 
@@ -109,6 +117,7 @@ A lead generation tool that scrapes fresh B2B contact data, then uses OpenAI to 
 - **Relevance & Outreach Tips:** Why each lead matches and how to engage.
 - **Customizable Workflow:** Adjust lead count, enrichment depth, or ICP prompt.
 - **Debug Mode:** Trace decisions and API calls.
+- **CSV Export:** Save the enriched lead list for sharing/importing.
 
 ---
 
@@ -149,7 +158,7 @@ BRIGHT_DATA_API_KEY=your_scraping_api_key_here
 
 ## License
 
-This project is maintained by **Muhammad Muazzain** for educational and personal use.
+This project was built by **Muhammad Muazzain** for **Leveno**.
 
 ---
 

@@ -1,4 +1,7 @@
+import csv
+import io
 import json
+from datetime import datetime
 import streamlit as st
 from openai import OpenAI
 import requests
@@ -39,6 +42,14 @@ with st.sidebar:
     """)
     st.markdown("---")
     st.markdown("[GitHub](https://github.com/MuhammadMuazzain/ai-lead-generator)")
+    if st.session_state.get("last_enriched_leads"):
+        st.download_button(
+            label="⬇️ Export last results to CSV",
+            data=st.session_state.get("last_enriched_leads_csv_bytes", b""),
+            file_name=st.session_state.get("last_enriched_leads_csv_filename", "leads.csv"),
+            mime="text/csv",
+            use_container_width=True,
+        )
 
 
 if "messages" not in st.session_state:
@@ -50,6 +61,18 @@ for message in st.session_state.messages:
         st.markdown(message["content"])
 
 user_input = st.chat_input("Describe the Leads you want....")
+
+def leads_to_csv_bytes(leads: list[dict]) -> bytes:
+    if not leads:
+        return b""
+
+    fieldnames: list[str] = sorted({k for lead in leads for k in lead.keys()})
+    buf = io.StringIO()
+    writer = csv.DictWriter(buf, fieldnames=fieldnames, extrasaction="ignore")
+    writer.writeheader()
+    for lead in leads:
+        writer.writerow({k: lead.get(k, "") for k in fieldnames})
+    return buf.getvalue().encode("utf-8")
 
 def extract_search_parameters(user_input):
     """Use OpenAI to extract search parameters from natural language input"""
@@ -247,5 +270,19 @@ if user_input:
 
         message_placeholder.markdown("✅ Lead generation complete!")
         display_results(enriched_leads)
+
+        st.session_state.last_enriched_leads = enriched_leads
+        timestamp = datetime.now().strftime("%Y%m%d-%H%M%S")
+        st.session_state.last_enriched_leads_csv_filename = f"leads-{timestamp}.csv"
+        st.session_state.last_enriched_leads_csv_bytes = leads_to_csv_bytes(enriched_leads)
+
+        st.download_button(
+            label="⬇️ Export results to CSV",
+            data=st.session_state.last_enriched_leads_csv_bytes,
+            file_name=st.session_state.last_enriched_leads_csv_filename,
+            mime="text/csv",
+            use_container_width=True,
+        )
         
         st.session_state.messages.append({"role": "assistant", "content": f"Found {len(enriched_leads)} leads for your query: {user_input}"})
+
